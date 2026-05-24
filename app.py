@@ -428,7 +428,7 @@ with tabs[1]:
             label_prefix = "👤 User"
             
         label = f"{label_prefix} #{n_id}\nBalance: ${node_attr['balance']:,.2f}\nRisk: {node_attr['location_risk']:.2f}"
-        pyvis_net.add_node(n_id, label=f"#{n_id}", title=label, color=color, size=size)
+        pyvis_net.add_node(int(n_id), label=f"#{n_id}", title=label, color=color, size=size)
         
     for u, v, key in sub_g.edges(data=True):
         is_fraud = key['is_fraud']
@@ -440,7 +440,7 @@ with tabs[1]:
             color = "#f97316"
             width = 5
             
-        pyvis_net.add_edge(u, v, color=color, width=width, title=title)
+        pyvis_net.add_edge(int(u), int(v), color=color, width=width, title=title)
         
     temp_html_path = "subgraph.html"
     pyvis_net.save_graph(temp_html_path)
