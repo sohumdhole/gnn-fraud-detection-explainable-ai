@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-import torch
 import networkx as nx
-from typing import Dict, Tuple, Any
+from typing import Dict, Any
 
 def generate_transaction_graph(
     num_users: int = 800,
@@ -111,10 +110,10 @@ def generate_transaction_graph(
         amount = np.random.exponential(scale=80.0) + 1.5
         hour = np.random.choice(np.arange(24), p=[
             0.01, 0.01, 0.005, 0.005, 0.01, 0.02, 
-            0.04, 0.06, 0.08, 0.07, 0.06, 0.06,
-            0.07, 0.06, 0.05, 0.06, 0.07, 0.08,
+            0.04, 0.06, 0.07, 0.07, 0.06, 0.06,
+            0.07, 0.06, 0.05, 0.06, 0.07, 0.07,
             0.08, 0.05, 0.03, 0.02, 0.01, 0.01
-        ]) # realistic hourly distribution
+        ]) # realistic hourly distribution (sums to exactly 1.0)
         day_of_week = np.random.randint(0, 7)
         dist = np.random.exponential(scale=15.0) # normal distance (km)
         online = 1.0 if np.random.rand() < 0.65 else 0.0
@@ -315,11 +314,11 @@ def generate_transaction_graph(
     df_transactions['transaction_id'] = np.arange(len(df_transactions))
 
     return {
-        'node_features': torch.tensor(node_features),
-        'node_types': torch.tensor(node_types),
-        'edge_index': torch.tensor(edge_index),
-        'edge_features': torch.tensor(edge_features),
-        'edge_labels': torch.tensor(edge_labels),
+        'node_features': node_features,
+        'node_types': node_types,
+        'edge_index': edge_index,
+        'edge_features': edge_features,
+        'edge_labels': edge_labels,
         'df_transactions': df_transactions,
         'df_nodes': df_nodes,
         'nx_graph': nx_graph

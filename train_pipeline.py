@@ -25,11 +25,11 @@ def train_pipeline():
     )
     
     # Extract data as NumPy arrays
-    node_features = data['node_features'].numpy()
-    node_types = data['node_types'].numpy()
-    edge_index = data['edge_index'].numpy()
-    edge_features = data['edge_features'].numpy()
-    edge_labels = data['edge_labels'].numpy()
+    node_features = data['node_features']
+    node_types = data['node_types']
+    edge_index = data['edge_index']
+    edge_features = data['edge_features']
+    edge_labels = data['edge_labels']
     
     df_transactions = data['df_transactions']
     df_nodes = data['df_nodes']
