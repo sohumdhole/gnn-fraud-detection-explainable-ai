@@ -1,0 +1,33 @@
+{
+  "system_name": "Advanced GNN Fraud Detection Platform",
+  "version": "1.0.0",
+  "architecture_details": {
+    "data_pipeline": {
+      "ingestion": "Real-time transaction stream ingested via Apache Kafka or AWS Kinesis.",
+      "database_storage": "Raw transactions stored in PostgreSQL; account/entity relationship graph stored in Amazon Neptune or Neo4j Graph Database.",
+      "feature_store": "Feast or Redis Cache to store precomputed node embeddings, account balances, and rolling network density metrics."
+    },
+    "model_inference_pipeline": {
+      "offline_batch_training": {
+        "frequency": "Daily / Weekly batch retraining to update Graph Attention parameters on newer nodes and relationships.",
+        "execution": "Airflow DAG triggering a SageMaker PyTorch Training Job. Output weights saved to AWS S3."
+      },
+      "real_time_scoring": {
+        "engine": "FastAPI microservice containerized with Docker, deployed on AWS ECS or EKS (Kubernetes) with auto-scaling.",
+        "embedding_lookup": "Look up precomputed GNN node structural embeddings from Redis (latency < 2ms) rather than re-evaluating the full GNN over the entire graph for every transaction.",
+        "classification": "MLP Edge Classifier combines source account embedding, target merchant embedding, and active transaction parameters (amount, distance) to score risk instantly."
+      },
+      "explainability_engine": {
+        "framework": "Kernel SHAP running asynchronously via Celery Task Queue to prevent blocking the real-time scoring path. Explanations are cached in Redis and pushed to the fraud analyst dashboard."
+      }
+    },
+    "alerting_dashboard": {
+      "frontend": "Streamlit Dashboard running in an ECS task or internal Kubernetes node, presenting visual analytics, topological maps, and explainability waterflows.",
+      "action_trigger": "High-risk predictions (Probability >= 0.8) trigger real-time PagerDuty alerts or customer transaction declines automatically via webhook."
+    },
+    "scaling_limits": {
+      "gpu_acceleration": "NVIDIA T4 or G4dn instances for offline GNN training.",
+      "concurrency": "FastAPI + Uvicorn handles up to 5,000 requests/sec when structural GNN embeddings are served from memory/Redis."
+    }
+  }
+}
